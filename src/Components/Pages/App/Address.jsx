@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import Phone from "../../../assets/phone.png";
 import Email from "../../../assets/email.png";
 import location from "../../../assets/address.png";
@@ -7,7 +6,7 @@ import location from "../../../assets/address.png";
 function Address() {
     
   return (
-    <div className="c h-screen relative">
+    <div className="c h-full relative">
       <div className="c-bg w-2 bg-green-500 h-full absolute"></div>
       <div className="c-wrapper p-12 flex">
         <div className="c-left flex-1">
@@ -19,7 +18,7 @@ function Address() {
                 onClick={() => (window.location.href = "tel:+8801985381288")}
                 className="text-base"
               >
-                +88 0198 538 1288
+                +88 01917-942352
               </button>
             </div>
             <div className="c-info-item flex items-center my-10 font-light w-4/5">
@@ -30,7 +29,7 @@ function Address() {
                 }
                 className="text-base"
               >
-                sabidofficial@gmail.com
+                __@gmail.com
               </button>
             </div>
             <div className="c-info-item my-10 font-light w-4/5 flex items-center">
@@ -39,7 +38,7 @@ function Address() {
             </div>
           </div>
         </div>
-        <div className="c-right flex-1 flex flex-col items-center justify-center">
+        <div className="hidden c-right flex-1 md:flex flex-col items-center justify-center">
           <p className="c-desc text-base">
             <b>Reach Out and Start a Conversation: </b> Let's Discuss Your
             Ideas, Projects, and Opportunities for Collaboration

@@ -2,6 +2,7 @@ import AboutImage from "./Components/Pages/App/AboutImage";
 import AboutText from "./Components/Pages/App/AboutText";
 import Address from "./Components/Pages/App/Address";
 import DownloadResume from "./Components/Pages/App/DownloadResume";
+import Map from "./Components/Pages/App/Map";
 import Memories from "./Components/Pages/App/Memories";
 import MoreInfo from "./Components/Pages/App/MoreInfo";
 import SkillsComp from "./Components/Pages/App/SkillsComp";
@@ -41,6 +42,9 @@ function App() {
       </div>
       <div className="my-10">
         <Address />
+      </div>
+      <div className="my-10">
+        <Map />
       </div>
     </>
   );

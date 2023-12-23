@@ -25,7 +25,7 @@ function PDFViewer() {
     <div className="w-full p-0">
       
       {!pdfLoaded ? (
-        <div className="flex items-center justify-center h-48">
+        <div className="flex items-center justify-center h-full">
           <p>Loading PDF...</p>
         </div>
       ) : null}
@@ -42,7 +42,7 @@ function PDFViewer() {
         <a
           href={pdfDirectLink}
           download="your-file-name.pdf" // Specify the desired file name
-          className={`bg-primary flex justify-center items-center my-8 shadow-xl text-white px-6 py-3 rounded-full transition-transform transform hover:scale-105`}
+          className={`bg-primary flex justify-center items-center my-5 shadow-xl text-white px-6 py-3 rounded-full transition-transform transform hover:scale-105`}
         >
           <FaDownload className="mr-2" /> Download Resume
         </a>

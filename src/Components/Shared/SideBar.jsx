@@ -1,18 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {
-  FaEdit,
   FaFile,
   FaFolder,
-  FaGlobe,
-  FaHandHoldingUsd,
   FaInstagram,
   FaTiktok,
   FaTwitter,
   FaYoutube,
+  FaHome,
+  FaPhone,
 } from "react-icons/fa";
-import { FaMoneyCheckDollar } from "react-icons/fa6";
-import { TbFileSettings } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { TfiAlignJustify } from "react-icons/tfi";
 import profile from "../../assets/profile_picture.jpg";
@@ -20,22 +17,11 @@ import { FaFacebook } from "react-icons/fa";
 
 const Menus = [
   // Biography
-  // {
-  //   title: "Biography",
-  //   icons: <FaHandHoldingUsd />,
-  //   subMenus: [
-  //     {
-  //       title: "Biography",
-  //       icons: <TbFileSettings />,
-  //       to: "/Biography",
-  //     },
-  //     {
-  //       title: "Option",
-  //       icons: <FaMoneyCheckDollar />,
-  //       to: "/Option",
-  //     },
-  //   ],
-  // },
+  {
+    title: "Home",
+    icons: <FaHome />,
+    to: "/",
+  },
   {
     title: "Documents",
     icons: <FaFolder />,
@@ -45,11 +31,6 @@ const Menus = [
         icons: <FaFile />,
         to: "/resume",
       },
-      {
-        title: "Option",
-        icons: <FaMoneyCheckDollar />,
-        to: "/Option",
-      },
     ],
   },
 ];
@@ -58,7 +39,7 @@ const SocialLinks = [
   {
     title: "Facebook",
     icons: <FaFacebook className="text-white" />,
-    to: "https://web.facebook.com/Shunno.Habib", // Replace with your actual link
+    to: "https://web.facebook.com/Shunno.Habib",
   },
   {
     title: "Twitter",
@@ -143,25 +124,29 @@ const SideBar = ({ open, setOpen }) => {
               !open && "h-20 w-20 p-2 m-0"
             }`}
           >
-            <img
-              className="rounded-full w-full h-full object-cover"
-              src={profile}
-              alt="Profile"
-            />
+            <Link to={"/"}>
+              <img
+                className="rounded-full w-full h-full object-cover"
+                src={profile}
+                alt="Profile"
+              />
+            </Link>
 
             {/* Transparent overlay */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-80 transition-opacity duration-300 bg-black rounded-full">
+            {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-80 transition-opacity duration-300 bg-black rounded-full">
               <div className="text-white flex items-center gap-2">
                 <FaEdit />
                 <span>Edit Profile</span>
               </div>
-            </div>
+            </div> */}
           </div>
           <h3 className="text-2xl text-center mt-2 font-teko font-medium italic">
             {!open ? "Habib" : "Habib Rahman"}
           </h3>
           {open && (
-            <p className="my-3 text-accent">Be your best. Never give up</p>
+            <p className="my-3 text-Exo text-highlight">
+              Be your best. Never give up
+            </p>
           )}
 
           {/* On close menu */}
@@ -267,7 +252,18 @@ const SideBar = ({ open, setOpen }) => {
                         </li>
                       </Link>
                     ))}
+                    
                   </ul>
+                  <div className="flex justify-center my-3">
+
+                  <button
+                      className={`btn btn-primary pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-6`}
+                      >
+                      <a href="tel:+8801917942352" className="text-white flex items-center md:gap-3">
+                       <FaPhone /> Call Me
+                      </a>
+                    </button>
+                      </div>
                 </div>
               ) : (
                 <Link key={index} to={Menu.to}>
@@ -282,7 +278,7 @@ const SideBar = ({ open, setOpen }) => {
                       }`}
                     >
                       <div className="flex  items-center gap-2">
-                        {Menu.icons}{" "}
+                        {Menu.icons}
                         <span
                           className={`${
                             !open && "hidden scale-0"

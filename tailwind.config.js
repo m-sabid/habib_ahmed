@@ -20,7 +20,7 @@ export default {
   },
   theme: {
     fontFamily: {
-      teko: ["Teko", "sans-serif"],
+      teko: ["Teko", "Exo", "sans-serif"],
     },
     extend: {
       colors: {
