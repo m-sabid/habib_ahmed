@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FaFile,
   FaFolder,
@@ -9,11 +9,17 @@ import {
   FaYoutube,
   FaHome,
   FaPhone,
+  FaCog,
+  FaUserCheck,
+  FaOutdent,
+  FaAngleDown,
+  FaCheck,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { TfiAlignJustify } from "react-icons/tfi";
 import profile from "../../assets/profile_picture.jpg";
 import { FaFacebook } from "react-icons/fa";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Menus = [
   // Biography
@@ -32,6 +38,12 @@ const Menus = [
         to: "/resume",
       },
     ],
+  },
+  {
+    title: "Settings",
+    icons: <FaCog />,
+    to: "/settings",
+    role: "admin",
   },
 ];
 
@@ -66,6 +78,8 @@ const SocialLinks = [
 const SideBar = ({ open, setOpen }) => {
   const [expandedMenus, setExpandedMenus] = useState([]);
 
+  const { user, handleLogout } = useContext(AuthContext);
+
   const handleToggleSubMenu = (index) => {
     const expandedMenusCopy = [...expandedMenus];
     if (expandedMenusCopy.includes(index)) {
@@ -93,7 +107,8 @@ const SideBar = ({ open, setOpen }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [setOpen]);
+
 
   return (
     <div className="min-h-full relative">
@@ -103,11 +118,46 @@ const SideBar = ({ open, setOpen }) => {
         } min-h-[100vh] pb-10 relative duration-300`}
       >
         {/* Welcome Section */}
-        <div className={`absolute pt-5 cursor-pointer w-full`}>
+        <div className={`absolute cursor-pointer ${!open && "mt-5"} w-full`}>
           <div className="flex justify-between items-center w-full px-3">
-            <h1 className={`text-2xl ${!open && "hidden"} uppercase`}>
-              Welcome
-            </h1>
+            {/*  */}
+
+            {user ? (
+              <div className={`${!open && "hidden"} flex justify-center mb-3`}>
+                <details className="dropdown">
+                  <summary className="btn border-none p-0 bg-transparent outline-none shadow-none">
+                    <h1 className="text-2xl group relative text-center uppercase">
+                      Welcome
+                      <div className="hidden group-hover:block absolute top-1/2 -right-6 transform -translate-y-1/2 text-secondary">
+                        <FaAngleDown />
+                      </div>
+                    </h1>
+                  </summary>
+                  <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 w-52">
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className={`btn btn-success btn-sm pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-3 text-white hover:text-gray-800`}
+                      >
+                        <FaOutdent /> {open && "Logout"}
+                      </button>
+                    </li>
+                  </ul>
+                </details>
+              </div>
+            ) : (
+              <div className={`${!open && "hidden"} flex justify-center my-3`}>
+                <Link
+                  to={"/login"}
+                  className={`btn btn-success btn-sm pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-3 text-white`}
+                >
+                  <FaUserCheck /> {open && "Login"}
+                </Link>
+              </div>
+            )}
+
+            {/*  */}
+
             <p
               className={`text-2xl ${!open && "flex justify-center w-full"}`}
               onClick={() => setOpen(!open)}
@@ -120,7 +170,7 @@ const SideBar = ({ open, setOpen }) => {
         {/* Profile Section */}
         <div className="pt-16 flex flex-col items-center justify-center">
           <div
-            className={`relative m-3 overflow-hidden ${open && "h-48 w-48"} ${
+            className={`m-3 overflow-hidden ${open && "h-48 w-48"} ${
               !open && "h-20 w-20 p-2 m-0"
             }`}
           >
@@ -131,20 +181,19 @@ const SideBar = ({ open, setOpen }) => {
                 alt="Profile"
               />
             </Link>
-
-            {/* Transparent overlay */}
-            {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-80 transition-opacity duration-300 bg-black rounded-full">
-              <div className="text-white flex items-center gap-2">
-                <FaEdit />
-                <span>Edit Profile</span>
-              </div>
-            </div> */}
           </div>
-          <h3 className="text-2xl text-center mt-2 font-teko font-medium italic">
-            {!open ? "Habib" : "Habib Rahman"}
+          <h3 className="flex items-center gap-2 text-2xl text-center mt-2 font-teko font-medium italic">
+            {!open ? "Habib" : "Habib Rahman"}{" "}
+            {open && user?.extendedData?.role === "admin" ? (
+              <div className="bg-secondary text-sm flex justify-center items-center text-white rounded-full h-5 w-5">
+                <FaCheck />
+              </div>
+            ) : (
+              ""
+            )}
           </h3>
           {open && (
-            <p className="my-3 text-Exo text-highlight">
+            <p className="my-3 text-Exo text-highlight text-center">
               Be your best. Never give up
             </p>
           )}
@@ -156,20 +205,29 @@ const SideBar = ({ open, setOpen }) => {
                 {SocialLinks?.map((dt, index) => {
                   console.log(dt.to);
                   return (
-                    <>
+                    <div key={index}>
                       <Link
                         to={dt.to}
                         target="_blank"
-                        className="bg-blue-500 p-2 rounded-full"
+                        className="bg-blue-500 p-2 flex rounded-full"
                       >
                         {dt.icons}
                       </Link>
-                    </>
+                    </div>
                   );
                 })}
               </div>
             </div>
           )}
+        </div>
+
+        <div className="flex justify-center my-3">
+          <a
+            href="tel:+8801917942352"
+            className={`btn btn-primary pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-6 text-white`}
+          >
+            <FaPhone /> {open && "Call Me"}
+          </a>
         </div>
 
         {/* On open Menu */}
@@ -181,15 +239,15 @@ const SideBar = ({ open, setOpen }) => {
           {open &&
             SocialLinks?.map((dt, index) => {
               return (
-                <>
+                <div key={index}>
                   <Link
                     to={dt.to}
                     target="_blank"
-                    className="bg-blue-500 p-2 rounded-full"
+                    className="bg-blue-500 flex p-2 rounded-full"
                   >
                     {dt.icons}
                   </Link>
-                </>
+                </div>
               );
             })}
         </div>
@@ -197,99 +255,96 @@ const SideBar = ({ open, setOpen }) => {
         <ul className={`${open && "mt-4"}`}>
           {Menus?.map((Menu, index) => (
             <div key={index}>
-              {Menu.subMenus && Menu.subMenus.length > 0 ? (
-                <div>
-                  <div
-                    className={`text-lg w-full font-medium cursor-pointer flex justify-between ${
-                      !open && "justify-center pl-8 py-2"
-                    } py-1 px-4`}
-                    onClick={() => handleToggleSubMenu(index)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <p className="text-erp_menu_icons">{Menu.icons} </p>
-                      <span
-                        className={`${
-                          !open && "hidden scale-0 "
-                        } origin-left duration-200 text-md text-erp_menu_text`}
-                      >
-                        {Menu.title}
-                      </span>
-                    </div>
+              {/* Check if the user has the "admin" role and the menu requires "admin" role */}
+              {(!Menu.role ||
+                (user?.extendedData?.role === "admin" &&
+                  Menu.role === "admin")) && (
+                <>
+                  {Menu.subMenus && Menu.subMenus.length > 0 ? (
                     <div>
-                      <span
-                        className={`${
-                          !open && "hidden scale-0"
-                        } origin-left duration-200`}
+                      <div
+                        className={`text-lg w-full font-medium cursor-pointer flex justify-between ${
+                          !open && "justify-center pl-8 py-2"
+                        } py-1 px-4`}
+                        onClick={() => handleToggleSubMenu(index)}
                       >
-                        {expandedMenus.includes(index) ? "-" : "+"}
-                      </span>
-                    </div>
-                  </div>
-                  <ul
-                    className={`${
-                      expandedMenus.includes(index)
-                        ? "max-h-screen transition-max-h duration-[2s] ease-in-out"
-                        : "max-h-0 transition-max-h duration-[1s] ease-in-out"
-                    } overflow-hidden`}
-                  >
-                    {Menu.subMenus.map((submenu, subIndex) => (
-                      <Link key={subIndex} to={submenu.to}>
-                        <li
-                          className={`flex pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-6 ${
-                            subIndex === 0 && "bg-light-white"
-                          }`}
-                        >
-                          <Link className="pl-4 text-erp_submenu_icons">
-                            {submenu.icons}
-                          </Link>
+                        <div className="flex items-center gap-2">
+                          <p className="text-erp_menu_icons">{Menu.icons} </p>
+                          <span
+                            className={`${
+                              !open && "hidden scale-0 "
+                            } origin-left duration-200 text-md text-erp_menu_text`}
+                          >
+                            {Menu.title}
+                          </span>
+                        </div>
+                        <div>
                           <span
                             className={`${
                               !open && "hidden scale-0"
-                            } origin-left duration-200 text-md text-erp_submenu_text`}
+                            } origin-left duration-200`}
                           >
-                            {submenu.title}
+                            {expandedMenus.includes(index) ? "-" : "+"}
                           </span>
-                        </li>
-                      </Link>
-                    ))}
-                    
-                  </ul>
-                  <div className="flex justify-center my-3">
+                        </div>
+                      </div>
 
-                  <button
-                      className={`btn btn-primary pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-6`}
+                      <ul
+                        className={`${
+                          expandedMenus.includes(index)
+                            ? "max-h-screen transition-max-h duration-[2s] ease-in-out"
+                            : "max-h-0 transition-max-h duration-[1s] ease-in-out"
+                        } overflow-hidden`}
                       >
-                      <a href="tel:+8801917942352" className="text-white flex items-center md:gap-3">
-                       <FaPhone /> Call Me
-                      </a>
-                    </button>
-                      </div>
-                </div>
-              ) : (
-                <Link key={index} to={Menu.to}>
-                  <li
-                    className={
-                      "selection:font-medium font-semibold text-lg overflow-hidden"
-                    }
-                  >
-                    <div
-                      className={`flex justify-between rounded-2xl py-1 px-4 ${
-                        !open && "justify-center pl-8 py-2"
-                      }`}
-                    >
-                      <div className="flex  items-center gap-2">
-                        {Menu.icons}
-                        <span
-                          className={`${
-                            !open && "hidden scale-0"
-                          } origin-left duration-200`}
-                        >
-                          {Menu.title}
-                        </span>
-                      </div>
+                        {Menu.subMenus.map((submenu, subIndex) => (
+                          <Link key={subIndex} to={submenu.to}>
+                            <li
+                              className={`flex pb-1 rounded-md cursor-pointer hover:bg-light-white text-sm items-center gap-x-4 py-1 px-6 ${
+                                subIndex === 0 && "bg-light-white"
+                              }`}
+                            >
+                              <Link className="pl-4 text-erp_submenu_icons">
+                                {submenu.icons}
+                              </Link>
+                              <span
+                                className={`${
+                                  !open && "hidden scale-0"
+                                } origin-left duration-200 text-md text-erp_submenu_text`}
+                              >
+                                {submenu.title}
+                              </span>
+                            </li>
+                          </Link>
+                        ))}
+                      </ul>
                     </div>
-                  </li>
-                </Link>
+                  ) : (
+                    <Link key={index} to={Menu.to}>
+                      <li
+                        className={
+                          "selection:font-medium font-semibold text-lg overflow-hidden"
+                        }
+                      >
+                        <div
+                          className={`flex justify-between rounded-2xl py-1 px-4 ${
+                            !open && "justify-center pl-8 py-2"
+                          }`}
+                        >
+                          <div className="flex  items-center gap-2">
+                            {Menu.icons}
+                            <span
+                              className={`${
+                                !open && "hidden scale-0"
+                              } origin-left duration-200`}
+                            >
+                              {Menu.title}
+                            </span>
+                          </div>
+                        </div>
+                      </li>
+                    </Link>
+                  )}
+                </>
               )}
             </div>
           ))}

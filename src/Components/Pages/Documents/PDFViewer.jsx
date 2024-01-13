@@ -39,13 +39,16 @@ function PDFViewer() {
         onError={handleError}
       ></iframe>
       <div className="flex items-center justify-between mb-2">
-        <a
-          href={pdfDirectLink}
-          download="your-file-name.pdf" // Specify the desired file name
-          className={`bg-primary flex justify-center items-center my-5 shadow-xl text-white px-6 py-3 rounded-full transition-transform transform hover:scale-105`}
-        >
-          <FaDownload className="mr-2" /> Download Resume
-        </a>
+      <a
+  href={pdfDirectLink}
+  download="your-file-name.pdf" // Specify the desired file name
+  target="_blank"
+  rel="noopener noreferrer"
+  className={`bg-primary flex justify-center items-center my-5 shadow-xl text-white px-6 py-3 rounded-full transition-transform transform hover:scale-105`}
+>
+  <FaDownload className="mr-2" /> Download Resume
+</a>
+
       </div>
     </div>
   );
